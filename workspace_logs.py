@@ -14,8 +14,7 @@ def create_azure_monitor_client():
     return azure_client
 
 
-def query_activity_workspace(client):
-    query = "AzureActivity | summarize count()"
+def query_activity_workspace(client, query):
     try:
         response = client.query_workspace(
             os.environ["LOGS_WORKSPACE_ID"], query, timespan=timedelta(days=7)
@@ -35,5 +34,12 @@ def query_activity_workspace(client):
         print(err)
 
 
-cli = create_azure_monitor_client()
-query_activity_workspace(cli)
+if __name__ == "__main__":
+
+    cli = create_azure_monitor_client()
+
+    q1 = "AzureActivity | summarize count()"
+    q2 = "AzureActivity"
+
+    query_activity_workspace(cli, q1)
+    query_activity_workspace(cli, q2)
